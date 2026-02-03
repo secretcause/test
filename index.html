@@ -118,19 +118,6 @@
     return res.json();
   }
 
-  // ======= 동기화 =======
-<button onclick="sync()">동기화</button>
-
-<script>
-function sync() {
-  google.script.run
-    .withSuccessHandler(() => alert("성공"))
-    .withFailureHandler(() => alert("실패"))
-    .syncCall();
-}
-</script>
-
-
   // ======= 렌더 =======
   function renderFolders(){
     const list = $("folderList");
@@ -411,6 +398,18 @@ function sync() {
     console.error(e);
     setSyncBadge("API 연결 실패", false);
   });
+
+  function sync() {
+  google.script.run
+    .withSuccessHandler(() => {
+      setSyncBadge("동기화 완료", true);
+    })
+    .withFailureHandler(() => {
+      setSyncBadge("API 연결 실패", false);
+    })
+    .syncCall();
+}
+
 </script>
 </body>
 </html>
