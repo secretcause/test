@@ -283,7 +283,7 @@
       div.querySelector("button[data-save]").onclick = async () => {
         const sel = div.querySelector(`select[data-result="${call.id}"]`);
         const result = sel.value;
-        const note = prompt("메모(선택):", call.note || "") ?? call.note || "";
+        const note = prompt("메모(선택):", call.note ?? "") ?? "";
         const r = await apiPost({ action:"updateCallResult", callId: call.id, result, note });
         if(!r.ok){ alert(r.error || "저장 실패"); return; }
         setTimeout(sync, 300);
