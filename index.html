@@ -333,21 +333,31 @@
     await sync();
   }
 
-  function editContact(contactId){
-    const c = db.contacts.find(x => String(x.id) === String(contactId));
-    if(!c) return;
-    const name = prompt("이름:", c.name||"") ?? c.name||"";
-    const phone = prompt("전화번호:", c.phone||"") ?? c.phone||"";
-    const memo = prompt("메모:", c.memo||"") ?? c.memo||"";
-    const folder = getCurrentFolder();
-    apiPost({
-      action:"updateContact",
-      id: c.id,
-      folderId: c.folderId,
-      folderName: folder ? folder.name : (c.folderName||""),
-      name, phone, memo
-    }).then(()=> setTimeout(sync, 300));
-  }
+function editContact(contactId){
+  const c = db.contacts.find(x => String(x.id) === String(contactId));
+  if(!c) return;
+
+  const name = prompt("이름:", c.name ?? "");
+  if (name === null) return; // 취소 누르면 수정 중단(원하면 제거 가능)
+
+  const phone = prompt("전화번호:", c.phone ?? "");
+  if (phone === null) return;
+
+  const memo = prompt("메모:", c.memo ?? "");
+  if (memo === null) return;
+
+  const folder = getCurrentFolder();
+
+  apiPost({
+    action: "updateContact",
+    id: c.id,
+    folderId: c.folderId,
+    folderName: folder ? folder.name : (c.folderName ?? ""),
+    name,
+    phone,
+    memo
+  }).then(() => setTimeout(sync, 300));
+}
 
   // ======= 내보내기/가져오기 =======
   function exportJson(){
