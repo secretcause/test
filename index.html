@@ -119,23 +119,17 @@
   }
 
   // ======= 동기화 =======
-  async function sync(){
-    setSyncBadge("동기화 중…");
-    const r = await apiGet("exportAll");
-    if(!r.ok){ setSyncBadge("동기화 실패", false); alert(r.error); return; }
-    db = { folders: r.folders || [], contacts: r.contacts || [], calls: r.calls || [] };
-    localStorage.setItem("autocall_db_cache", JSON.stringify(db));
-    renderAll();
-    setSyncBadge("동기화 완료 ✅");
-  }
+<button onclick="sync()">동기화</button>
 
-  function loadCache(){
-    const raw = localStorage.getItem("autocall_db_cache");
-    if(raw){
-      try { db = JSON.parse(raw); setSyncBadge("캐시 로드(오프라인)"); }
-      catch(e){}
-    }
-  }
+<script>
+function sync() {
+  google.script.run
+    .withSuccessHandler(() => alert("성공"))
+    .withFailureHandler(() => alert("실패"))
+    .syncCall();
+}
+</script>
+
 
   // ======= 렌더 =======
   function renderFolders(){
